@@ -6,5 +6,6 @@ const productController = require("../controllers/productControllers")
 
 router.post("/add", passport.authenticate("jwt", {session:false}), productController.add);
 router.post("/update/:id", passport.authenticate("jwt", {session:false}), productController.update);
-
+router.delete("/delete/:id", passport.authenticate("jwt", {session:false}), productController.delete);
+router.get("/view-latest", passport.authenticate("jwt", {session:false}), productController.viewLatest);
 module.exports = router;

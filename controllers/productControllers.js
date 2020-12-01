@@ -44,3 +44,40 @@ module.exports.update = async function (req, res) {
         });
     }
 }
+
+module.exports.delete = async function (req, res) {
+    try {
+        let product = await Product.findById(req.params.id);
+        console.log(product);
+        if (product) {
+            await Product.remove(product);
+            return res.status(200).json({
+                status: "success"
+            });
+        } else {
+            return res.status(409).json({
+                status: "failure",
+                reason: "This product not exist"
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
+            status: "failure",
+            reason: "Internal server error"
+        });
+    }
+}
+
+module.exports.viewLatest = async function (req, res) {
+    try {
+        let products = await Product.find().select({name: 1, price: 1, quantity:1, category:1}).sort({createdAt: -1}).limit(4);
+        return res.status(200).json({
+             products: products || []
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failure",
+            reason: "Internal server error"
+        });
+    } 
+}
