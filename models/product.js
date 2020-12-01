@@ -8,11 +8,13 @@ const productSchema = new Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        min: [1, "inavlid price"]
     },
     quantity: {
         type: Number,
-        required: true
+        required: true,
+        min: [1, "invalid quantity"]
     },
     category: {
         type: String,

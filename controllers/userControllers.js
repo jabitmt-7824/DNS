@@ -9,9 +9,9 @@ module.exports.signupUser = async function (req, res) {
                 reason: "Password and confirm password does not match"
             });
         }
-        let user = await User.findOne({ email: req.body.email });
+        let user = await User.findOne({ name: req.body.name });
         if (!user) {
-            await User.create({name:req.body.name, email:req.body.email, password:req.body.password});
+            await User.create({name:req.body.name, password:req.body.password});
             return res.status(201).json({
                 status: "success"
             });
@@ -26,7 +26,7 @@ module.exports.signupUser = async function (req, res) {
     } catch (err) {
         return res.status(500).json({
             status: "failure",
-            reason: `Internal server error ${error}`
+            reason: `Internal server error ${err}`
         });
     }
 }
@@ -47,7 +47,7 @@ module.exports.login = async function(req, res){
         return res.status(200).json({
             status: "success",
             data: {
-                token: jwt.sign(user.toJSON(), 'ccare', { expiresIn: '2 days' })
+                token: jwt.sign(user.toJSON(), 'dns', { expiresIn: '2 days' })
             }
         }); 
     }

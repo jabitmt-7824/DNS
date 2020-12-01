@@ -1,36 +1,46 @@
 const Product = require("../models/product");
-const User = require("../models/user");
 
 module.exports.add = async function (req, res) {
     try {
-         let product = User.find({name:req.body.name});
-         if(product){
-            return res.status(409).json({
-                status: "failure",
-                reason: "This product already exist"
-            }); 
-         }
-         else if(req.body.price <= 0){
-            return res.status(400).json({
-                status: "failure",
-                reason: "invalid price"
-            });
-         } else if(req.body.quantity <= 0) {
-            return res.status(400).json({
-                status: "failure",
-                reason: "invalid quantity"
-            });
-         } else {
-             Product.create(req.body);
-             return res.status(200).json({
-                status: "success"
-            });
-         }
-
+        await Product.create(req.body);
+        return res.status(200).json({
+            status: "success"
+        });
     } catch (err) {
         return res.status(500).json({
             status: "failure",
-            reason: `Internal server error ${error}`
+            reason: `${err}`
+        });
+    }
+}
+
+module.exports.update = async function (req, res) {
+    try {
+        let product = await Product.findById(req.params.id);
+        if (product) {
+            if (req.body.price) {
+                product.price = req.body.price;
+            }
+            if (req.body.quantity) {
+                product.quantity = req.body.quantity;
+            }
+            if (req.body.category) {
+                product.category = req.body.category;
+            }
+            await product.save();
+            return res.status(200).json({
+                status: "success"
+            });
+        } else {
+            return res.status(409).json({
+                status: "failure",
+                reason: "This product not exist"
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
+            status: "failure",
+            reason: `${err}`
         });
     }
 }

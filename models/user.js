@@ -6,13 +6,11 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        required: true
-    },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: [6, "Password atleast contain 6 characters"],
+        maxlength: [10, "password deos not exceed 10 characters"]
     },
 },
     {
