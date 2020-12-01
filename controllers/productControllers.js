@@ -14,6 +14,20 @@ module.exports.add = async function (req, res) {
     }
 }
 
+module.exports.view = async function (req, res) {
+    try {
+        let products = await Product.find();
+        return res.status(200).json({
+            products: products || []
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failure",
+            reason: `${err}`
+        });
+    }
+}
+
 module.exports.update = async function (req, res) {
     try {
         let product = await Product.findById(req.params.id);
@@ -74,6 +88,32 @@ module.exports.viewLatest = async function (req, res) {
         return res.status(200).json({
              products: products || []
         });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failure",
+            reason: "Internal server error"
+        });
+    } 
+}
+
+module.exports.search = async function (req, res) {
+    try {
+        if(req.body.nameSearch && req.body.categorySearch) {
+            let products = await Product.find({ name: { $regex: req.body.nameSearch, $options: "i" }, category: req.body.categorySearch});
+            return res.status(200).json({
+                products: products || []
+           });
+        } else if(req.body.nameSearch){
+            let products = await Product.find({ name: { $regex: req.body.nameSearch, $options: "i" }});
+            return res.status(200).json({
+                products: products || []
+           });
+        } else if(req.body.categorySearch) {
+            let products = await Product.find({ category: req.body.categorySearch});
+            return res.status(200).json({
+                products: products || []
+           });
+        }
     } catch (err) {
         return res.status(500).json({
             status: "failure",
