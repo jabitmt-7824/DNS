@@ -9,5 +9,6 @@ router.post("/update/:id", passport.authenticate("jwt", {session:false}), produc
 router.delete("/delete/:id", passport.authenticate("jwt", {session:false}), productController.delete);
 router.get("/view-latest", passport.authenticate("jwt", {session:false}), productController.viewLatest);
 router.get("/search", passport.authenticate("jwt", {session:false}), productController.search);
+router.get("/view", passport.authenticate("jwt", {session:false}), productController.view);
 
 module.exports = router;
