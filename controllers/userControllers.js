@@ -59,19 +59,3 @@ module.exports.login = async function (req, res) {
         });
     }
 }
-
-// logout
-module.exports.logout = async function (req, res) {
-    try {
-        await req.logout();
-        return res.json(500, {
-            status: "success"
-        });
-    }
-    catch (err) {
-        return res.json(500, {
-            status: "failure",
-            reason: "internal server error"
-        });
-    }
-}
